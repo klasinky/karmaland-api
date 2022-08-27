@@ -13,7 +13,8 @@ app.include_router(channels_router, prefix='/channels', tags=['channels'])
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
-
+    "https://klasinky.github.io/karmaland-ui/",
+    "https://klasinky.github.io/",
 ]
 
 app.add_middleware(
