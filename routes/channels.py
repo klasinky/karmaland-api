@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -16,6 +18,6 @@ def index():
 
 
 @app.post('/', response_model=list)
-def check_users(channels: list[Channel], db: Session = Depends(get_db), settings: Settings = Depends(get_settings)):
+def check_users(channels: List[Channel], db: Session = Depends(get_db), settings: Settings = Depends(get_settings)):
     result = check_users_list(channels, db, settings)
     return result
