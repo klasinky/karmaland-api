@@ -1,3 +1,5 @@
+from typing import List
+
 import requests
 from sqlalchemy.orm import Session
 
@@ -7,7 +9,7 @@ from settings import Settings
 from utils.constants import URL_USER, TWITCH, VALIDATE_TOKEN, GENERATE_TOKEN_TWITCH
 
 
-def check_users_list(channels: list[Channel], db: Session, settings: Settings):
+def check_users_list(channels: List[Channel], db: Session, settings: Settings):
     results = []
     token_twitch = controller.get_token(db)
     if not token_twitch or not validate_twitch_token(token_twitch):
