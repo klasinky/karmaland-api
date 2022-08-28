@@ -14,7 +14,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost:3001",
     "https://klasinky.github.io/karmaland-ui/",
-    "https://klasinky.github.io/",
+    "https://klasinky.github.io",
 ]
 
 app.add_middleware(
