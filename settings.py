@@ -4,6 +4,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     SECRET_ID_TWITCH: str
     CLIENT_ID_TWITCH: str
+    API_KEY_YOUTUBE: str
 
     class Config:
         env_file = '.env'

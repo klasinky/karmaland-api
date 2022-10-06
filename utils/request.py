@@ -6,11 +6,12 @@ from sqlalchemy.orm import Session
 import utils.crud as controller
 from schemas.channels import Channel
 from settings import Settings
-from utils.constants import URL_USER, TWITCH, VALIDATE_TOKEN, GENERATE_TOKEN_TWITCH
+from utils.constants import URL_USER, TWITCH, VALIDATE_TOKEN, GENERATE_TOKEN_TWITCH, GET_CHANNEL_ID, GET_CHANNEL_INFO, YOUTUBE
 
 
 def check_users_list(channels: List[Channel], db: Session, settings: Settings):
     results = []
+    
     token_twitch = controller.get_token(db)
     if not token_twitch or not validate_twitch_token(token_twitch):
         # Get new token
@@ -24,7 +25,7 @@ def check_users_list(channels: List[Channel], db: Session, settings: Settings):
         if channel.platform == TWITCH:
             data = check_twitch_user(channel.name, token_twitch, settings)
         else:
-            data = check_youtube_user(channel.name)
+            data = check_youtube_user(channel.name, settings.API_KEY_YOUTUBE)
         if data:
             results.append(data)
     return results
@@ -50,8 +51,26 @@ def check_twitch_user(twitch_name, token, settings):
     return None
 
 
-def check_youtube_user(youtube_name):
-    return youtube_name
+def check_youtube_user(youtube_name, api_key):
+    url_channel_id = GET_CHANNEL_ID.format(youtube_name, api_key)
+    response = requests.get(url_channel_id)
+    data = response.json()
+
+    if "items" in data:
+        channel_id = data['items'][0]['id']    
+        url_channel_info = GET_CHANNEL_INFO.format(channel_id, api_key)
+        response = requests.get(url_channel_info)
+        data = response.json()
+        
+        if len(data['items']) > 0:
+            data_channel = data['item'][0]['snippet']
+            ctx = {
+                'user_name': youtube_name,
+                'title': data_channel['title'],
+                'platform': YOUTUBE,
+            }
+            return ctx
+    return None
 
 
 def validate_twitch_token(token) -> bool:
