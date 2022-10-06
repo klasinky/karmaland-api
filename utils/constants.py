@@ -7,5 +7,4 @@ TWITCH = 'twitch'
 YOUTUBE = 'youtube'
 
 # Youtube API
-GET_CHANNEL_ID = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forUsername={}&key={}'
 GET_CHANNEL_INFO = 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId={}&eventType=live&type=video&key={}'
