@@ -1,5 +1,5 @@
 from typing import List
-
+import json
 import requests
 from sqlalchemy.orm import Session
 
@@ -8,6 +8,9 @@ from schemas.channels import Channel
 from settings import Settings
 from utils.constants import URL_USER, TWITCH, VALIDATE_TOKEN, GENERATE_TOKEN_TWITCH, GET_CHANNEL_INFO, YOUTUBE
 
+if __name__ == "__main__":
+    print("hola")
+    
 
 def check_users_list(channels: List[Channel], db: Session, settings: Settings):
     results = []
@@ -54,7 +57,7 @@ def check_twitch_user(twitch_name, token, settings):
 def check_youtube_user(youtube_name, channel_id, api_key):
     url_channel_info = GET_CHANNEL_INFO.format(channel_id, api_key)
     response = requests.get(url_channel_info)
-    data = response.json()
+    data = json.loads(response)
     
     if len(data['items']) > 0:
         data_channel = data['items'][0]['snippet']
