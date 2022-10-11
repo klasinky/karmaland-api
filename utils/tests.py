@@ -1,3 +1,4 @@
+from requests.models import Response
 from unittest import TestCase
 from unittest.mock import patch
 import json
@@ -5,6 +6,8 @@ from utils.constants import YOUTUBE
 
 from utils.request import check_youtube_user
 
+resp = Response()
+resp.encoding = 'ascii'
 class UtilsTests(TestCase):
     
     def setUp(self):
@@ -27,7 +30,8 @@ class UtilsTests(TestCase):
         """
             Test for get check youtube user mocking request youtube api
         """
-        mock_requests_get.return_value = json.dumps(self.channel_info)
+        resp._content = json.dumps(self.channel_info).encode('ascii')
+        mock_requests_get.return_value = resp
         data = check_youtube_user("channel test name", "test_id", "test_key")
         
         self.assertEqual(self.title, data["title"])
