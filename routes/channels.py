@@ -20,7 +20,6 @@ def my_key_builder(
         *args,
         **kwargs,
 ):
-    # Create a key from the arguments passed to the function
     cache_key = f'{func.__name__}{"-".join([channel.name for channel in channels])}'
     return cache_key
 
