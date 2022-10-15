@@ -4,14 +4,13 @@ import requests
 from sqlalchemy.orm import Session
 
 import utils.crud as controller
-from schemas.channels import Channel
+from schemas.channels import Channel, ChannelInfo
 from settings import Settings
 from utils.constants import URL_USER, TWITCH, VALIDATE_TOKEN, GENERATE_TOKEN_TWITCH, GET_CHANNEL_INFO, YOUTUBE
 
 
-def check_users_list(channels: List[Channel], db: Session, settings: Settings):
+async def check_users_list(channels: List[Channel], db: Session, settings: Settings) -> List[ChannelInfo]:
     results = []
-    
     token_twitch = controller.get_token(db)
     if not token_twitch or not validate_twitch_token(token_twitch):
         # Get new token
@@ -31,7 +30,7 @@ def check_users_list(channels: List[Channel], db: Session, settings: Settings):
     return results
 
 
-def check_twitch_user(twitch_name, token, settings):
+def check_twitch_user(twitch_name, token, settings) -> ChannelInfo | None:
     url = URL_USER + twitch_name
     # Post request to Twitch API
     token = "Bearer " + token
@@ -41,28 +40,28 @@ def check_twitch_user(twitch_name, token, settings):
     if len(data) > 0:
         data_channel = data[0]
         if data_channel['game_name'] == 'Minecraft':
-            ctx = {
-                'user_name': twitch_name,
-                'title': data_channel['title'],
-                'platform': TWITCH,
-                'viewer_count': data_channel['viewer_count'],
-            }
-            return ctx
+            channel = ChannelInfo(
+                user_name= twitch_name,
+                title= data_channel['title'],
+                platform= TWITCH,
+                viewer_count= data_channel['viewer_count'],
+            )
+            return channel
     return None
 
 
-def check_youtube_user(youtube_name, channel_id, api_key):
+def check_youtube_user(youtube_name, channel_id, api_key) -> ChannelInfo:
     url_channel_info = GET_CHANNEL_INFO.format(channel_id, api_key)
     response = requests.get(url_channel_info)
     data = response.json()
     if len(data['items']) > 0:
         data_channel = data['items'][0]['snippet']
-        ctx = {
-            'user_name': youtube_name,
-            'title': data_channel['title'],
-            'platform': YOUTUBE,
-        }
-        return ctx
+        channel = ChannelInfo(
+            user_name=youtube_name,
+            title=data_channel['title'],
+            platform=YOUTUBE,
+        )
+        return channel
     return None
 
 

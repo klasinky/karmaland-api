@@ -29,3 +29,9 @@ app.add_middleware(
 @app.get("/")
 def index():
     return {"message": "Hello World"}
+
+
+if __name__ == '__main__':
+    import uvicorn
+
+    uvicorn.run("api:app", host='localhost', port=8000, debug=True, reload=True)
