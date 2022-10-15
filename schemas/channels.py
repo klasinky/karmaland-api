@@ -10,3 +10,13 @@ class Channel(BaseModel):
 
     class Config:
         orm_mode = False
+
+
+class ChannelInfo(BaseModel):
+    user_name: str
+    title: str
+    platform: str
+    viewer_count: Optional[int] = None
+
+    class Config:
+        orm_mode = False
