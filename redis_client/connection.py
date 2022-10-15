@@ -28,8 +28,7 @@ class RedisConnection:
     def set(self, key: str, data: List[ChannelInfo], expire: int = 60):
         parse_data = pickle.dumps(data)
         self.connection.set(name=key, value=parse_data)
-        # Check if expire is set
-        self.connection.expire(name=key, time=60)
+        self.connection.expire(name=key, time=expire)
 
     def get(self, key: str):
         data = self.connection.get(key)
