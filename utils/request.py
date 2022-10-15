@@ -30,7 +30,7 @@ async def check_users_list(channels: List[Channel], db: Session, settings: Setti
     return results
 
 
-def check_twitch_user(twitch_name, token, settings) -> ChannelInfo | None:
+def check_twitch_user(twitch_name, token, settings):
     url = URL_USER + twitch_name
     # Post request to Twitch API
     token = "Bearer " + token
@@ -50,7 +50,7 @@ def check_twitch_user(twitch_name, token, settings) -> ChannelInfo | None:
     return None
 
 
-def check_youtube_user(youtube_name, channel_id, api_key) -> ChannelInfo:
+def check_youtube_user(youtube_name, channel_id, api_key):
     url_channel_info = GET_CHANNEL_INFO.format(channel_id, api_key)
     response = requests.get(url_channel_info)
     data = response.json()
